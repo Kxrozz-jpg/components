@@ -2,15 +2,12 @@
 
 const { Collection } = require("@discordjs/collection");
 const Collector = require("./Collector");
-<<<<<<< HEAD
 const {
   Events,
   InteractionTypes,
   MessageComponentTypes,
 } = require("../Utils/Constants");
-=======
 const { Events, InteractionTypes, MessageComponentTypes } = require("../Utils/Constants");
->>>>>>> 3675588f2afc5d111a24f9532ed8d511f20b230a
 
 /**
  * @typedef {CollectorOptions} InteractionCollectorOptions
