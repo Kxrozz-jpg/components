@@ -6,6 +6,7 @@ import {
   TextChannel,
   GuildChannel,
   Guild,
+  ComponentInteraction,
 } from "eris";
 import { CollectorFilter, CollectorOptions } from "../src/Structures/Collector";
 export { Collection } from "@discordjs/collection";
@@ -242,3 +243,42 @@ export class RichEmbed {
     ...fields: EmbedFieldData[] | EmbedFieldData[][]
   ): Required<EmbedFieldData>[];
 }
+
+export interface TextBased extends Message {
+  createMessageComponentCollector<
+    T extends
+      | MessageComponentType
+      | MessageComponentTypes
+      | undefined = undefined
+  >(
+    options?: MessageChannelCollectorOptionsParams<T>
+  ): InteractionCollectorReturnType<T>;
+}
+
+export type MessageComponentCollectorOptions<T extends ComponentInteraction> =
+  Omit<
+    InteractionCollectorOptions<T>,
+    "channel" | "message" | "guild" | "interactionType"
+  >;
+
+export type MessageCollectorOptionsParams<
+  T extends MessageComponentType | MessageComponentTypes | undefined
+> =
+  | {
+      componentType?: T;
+    } & MessageComponentCollectorOptions<InteractionExtractor<T>>;
+
+export type InteractionCollectorReturnType<
+  T extends MessageComponentType | MessageComponentTypes | undefined,
+  Cached extends boolean = false
+> = T extends MessageComponentType | MessageComponentTypes
+  ? ConditionalInteractionCollectorType<
+      MappedInteractionCollectorOptions<Cached>[T]
+    >
+  : InteractionCollector<ComponentInteraction>;
+
+export type ConditionalInteractionCollectorType<
+  T extends InteractionCollectorOptionsResolvable | undefined
+> = T extends InteractionCollectorOptions<infer Item>
+  ? InteractionCollector<Item>
+  : InteractionCollector<ComponentInteraction>;

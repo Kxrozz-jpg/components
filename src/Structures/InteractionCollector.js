@@ -2,11 +2,11 @@
 
 const { Collection } = require("@discordjs/collection");
 const Collector = require("./Collector");
-const { Events } = require("../Utils/Constants");
 const {
+  Events,
   InteractionTypes,
   MessageComponentTypes,
-} = require("../util/Constants");
+} = require("../Utils/Constants");
 
 /**
  * @typedef {CollectorOptions} InteractionCollectorOptions
@@ -233,3 +233,5 @@ class InteractionCollector extends Collector {
     }
   }
 }
+
+module.exports = InteractionCollector;
