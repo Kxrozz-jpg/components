@@ -17,9 +17,9 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/collection": "^0.4.0",
+    "components": "github:Kxrozz-jpg/components",
     "eris": "^0.16.1"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kxrozz-jpg/components.git"

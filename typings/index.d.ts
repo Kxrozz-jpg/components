@@ -5,7 +5,7 @@ import {
   Interaction,
   TextChannel,
   GuildChannel,
-  Guild
+  Guild,
 } from "eris";
 import { CollectorFilter, CollectorOptions } from "../src/Structures/Collector";
 export { Collection } from "@discordjs/collection";
@@ -134,4 +134,111 @@ export class InteractionCollector<T extends Interaction> extends Collector<
     event: string,
     listener: (...args: any[]) => Awaitable<void>
   ): this;
+}
+
+export interface RichEmbedAuthor {
+  name: string;
+  url?: string;
+  iconURL?: string;
+  proxyIconURL?: string;
+}
+
+export interface RichEmbedFooter {
+  text: string;
+  iconURL?: string;
+  proxyIconURL?: string;
+}
+
+export interface RichEmbedImage {
+  url: string;
+  proxyURL?: string;
+  height?: number;
+  width?: number;
+}
+
+export interface RichEmbedThumbnail {
+  url: string;
+  proxyURL?: string;
+  height?: number;
+  width?: number;
+}
+
+export interface RichEmbedOptions {
+  title?: string;
+  description?: string;
+  url?: string;
+  timestamp?: Date | number;
+  color?: ColorResolvable;
+  fields?: EmbedFieldData[];
+  author?: Partial<RichEmbedAuthor> & {
+    icon_url?: string;
+    proxy_icon_url?: string;
+  };
+  thumbnail?: Partial<RichEmbedThumbnail> & { proxy_url?: string };
+  image?: Partial<RichEmbedImage> & { proxy_url?: string };
+  footer?: Partial<RichEmbedFooter> & {
+    icon_url?: string;
+    proxy_icon_url?: string;
+  };
+}
+
+export interface EmbedField {
+  name: string;
+  value: string;
+  inline: boolean;
+}
+
+export interface EmbedFieldData {
+  name: string;
+  value: string;
+  inline?: boolean;
+}
+
+export class RichEmbed {
+  private _fieldEquals(field: EmbedField, other: EmbedField): boolean;
+
+  public constructor(data?: RichEmbed | RichEmbedOptions);
+  public author: RichEmbedAuthor | null;
+  public color: number | null;
+  public readonly createdAt: Date | null;
+  public description: string | null;
+  public fields: EmbedField[];
+  public footer: RichEmbedFooter | null;
+  public readonly hexColor: HexColorString | null;
+  public image: RichEmbedImage | null;
+  public readonly length: number;
+  public thumbnail: RichEmbedThumbnail | null;
+  public timestamp: number | null;
+  public title: string | null;
+  /** @deprecated */
+  public type: string;
+  public url: string | null;
+  public addField(name: string, value: string, inline?: boolean): this;
+  public addFields(...fields: EmbedFieldData[] | EmbedFieldData[][]): this;
+  public setFields(...fields: EmbedFieldData[] | EmbedFieldData[][]): this;
+  public setAuthor(name: string, iconURL?: string, url?: string): this;
+  public setColor(color: ColorResolvable): this;
+  public setDescription(description: string): this;
+  public setFooter(text: string, iconURL?: string): this;
+  public setImage(url: string): this;
+  public setThumbnail(url: string): this;
+  public setTimestamp(timestamp?: Date | number | null): this;
+  public setTitle(title: string): this;
+  public setURL(url: string): this;
+  public spliceFields(
+    index: number,
+    deleteCount: number,
+    ...fields: EmbedFieldData[] | EmbedFieldData[][]
+  ): this;
+  public equals(embed: RichEmbed): boolean;
+  public toJSON(): APIEmbed;
+
+  public static normalizeField(
+    name: string,
+    value: string,
+    inline?: boolean
+  ): Required<EmbedFieldData>;
+  public static normalizeFields(
+    ...fields: EmbedFieldData[] | EmbedFieldData[][]
+  ): Required<EmbedFieldData>[];
 }
