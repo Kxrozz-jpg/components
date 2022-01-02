@@ -11,7 +11,11 @@ import {
 import { CollectorFilter, CollectorOptions } from "../src/Structures/Collector";
 export { Collection } from "@discordjs/collection";
 import { EventEmitter } from "node:events";
-import { MessageComponentTypes, InteractionTypes } from "./enum";
+import {
+  MessageComponentTypes,
+  InteractionTypes,
+  MessageButtonStyles,
+} from "./enum";
 
 export interface CollectorResetTimerOptions {
   time?: number;
@@ -85,10 +89,9 @@ export interface InteractionCollectorOptions<T extends Interaction>
   message?: Message;
 }
 
-export class InteractionCollector<T extends Interaction> extends Collector<
-  string,
-  T
-> {
+export default class InteractionCollector<
+  T extends Interaction
+> extends Collector<string, T> {
   public constructor(client: Client, options?: InteractionCollectorOptions<T>);
   private _handleMessageDeletion(message: Message): void;
   private _handleChannelDeletion(channel: GuildChannel): void;
@@ -244,41 +247,28 @@ export class RichEmbed {
   ): Required<EmbedFieldData>[];
 }
 
-export interface TextBased extends Message {
-  createMessageComponentCollector<
-    T extends
-      | MessageComponentType
-      | MessageComponentTypes
-      | undefined = undefined
-  >(
-    options?: MessageChannelCollectorOptionsParams<T>
-  ): InteractionCollectorReturnType<T>;
+export class MessageButtton {
+  public constructor(data?: MessageButton);
+  public customId: string | null;
+  public disabled: boolean;
+  public emoji: string | null;
+  public label: string | null;
+  public style: MessageButtonStyle | null;
+  public type: 2;
+  public url: string | null;
+  public setCustomId(customId: string): this;
+  public setDisabled(disabled?: boolean): this;
+  public setEmoji(emoji: string): this;
+  public setLabel(label: string): this;
+  public setStyle(style: MessageButtonStyleResolvable): this;
+  public setURL(url: string): this;
+  public toJSON(): APIComponent;
+  private static resolveStyle(
+    style: MessageButtonStyleResolvable
+  ): MessageButtonStyle;
 }
 
-export type MessageComponentCollectorOptions<T extends ComponentInteraction> =
-  Omit<
-    InteractionCollectorOptions<T>,
-    "channel" | "message" | "guild" | "interactionType"
-  >;
-
-export type MessageCollectorOptionsParams<
-  T extends MessageComponentType | MessageComponentTypes | undefined
-> =
-  | {
-      componentType?: T;
-    } & MessageComponentCollectorOptions<InteractionExtractor<T>>;
-
-export type InteractionCollectorReturnType<
-  T extends MessageComponentType | MessageComponentTypes | undefined,
-  Cached extends boolean = false
-> = T extends MessageComponentType | MessageComponentTypes
-  ? ConditionalInteractionCollectorType<
-      MappedInteractionCollectorOptions<Cached>[T]
-    >
-  : InteractionCollector<ComponentInteraction>;
-
-export type ConditionalInteractionCollectorType<
-  T extends InteractionCollectorOptionsResolvable | undefined
-> = T extends InteractionCollectorOptions<infer Item>
-  ? InteractionCollector<Item>
-  : InteractionCollector<ComponentInteraction>;
+export type MessageButtonStyle = keyof typeof MessageButtonStyles;
+export type MessageButtonStyleResolvable =
+  | MessageButtonStyle
+  | MessageButtonStyles;

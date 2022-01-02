@@ -135,6 +135,24 @@ exports.MessageComponentTypes = createEnum([
   "SELECT_MENU",
 ]);
 
+/**
+ * The style of a message button
+ * * PRIMARY
+ * * SECONDARY
+ * * SUCCESS
+ * * DANGER
+ * * LINK
+ * @typedef {string} MessageButtonStyle
+ * @see {@link https://discord.com/developers/docs/interactions/message-components#button-object-button-styles}
+ */
+exports.MessageButtonStyles = createEnum([
+  null,
+  "PRIMARY",
+  "SECONDARY",
+  "SUCCESS",
+  "DANGER",
+  "LINK",
+]);
 
 function createEnum(keys) {
   const obj = {};
